@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Login from "./Login";
+import SignUp from "./SignUp";
+import ProfileCircle from "./assets/profile-circle.svg";
 import hotboy from './assets/hotboy.png';
 import fish from './assets/fish.png';
 import lemon from './assets/lemon.png';
@@ -357,6 +361,60 @@ const sidebarIcons = [
   { icon: "🧪", label: "Generate", disabled: true },
 ];
 
+// Floating Action Button (FAB) component
+function FabMenu() {
+  const [open, setOpen] = React.useState(false);
+  const [hovered, setHovered] = React.useState(null);
+  const actions = [
+    { icon: "➕", label: "Generate" },
+    { icon: (
+        <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+          <line x1="8" y1="21" x2="16" y2="21" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+      ), label: "Bank" },
+    { icon: <img src={ProfileCircle} alt="Profile" className="w-7 h-7 group-hover:invert group-hover:brightness-0" />, label: "Profile" },
+  ];
+  return (
+    <div
+      className="fixed bottom-8 left-4 z-50 flex flex-col items-center"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => { setOpen(false); setHovered(null); }}
+    >
+      {/* Action Circles */}
+      <div className={`flex flex-col items-center gap-3 mb-3 transition-all duration-300 ${open ? 'opacity-100 translate-y-0' : 'opacity-0 pointer-events-none translate-y-4'}`}>
+        {actions.map((action, i) => (
+          <div key={action.label} className="relative flex items-center">
+            <button
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-[#f7fd57] border-4 border-black text-2xl text-black font-extrabold shadow-[3px_3px_0_0_rgba(0,0,0,1)] hover:bg-black hover:text-white transition group"
+              title={action.label}
+              style={{ transitionDelay: `${i * 60}ms` }}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <span>{action.icon}</span>
+            </button>
+            {/* Tooltip */}
+            {hovered === i && (
+              <div className="absolute left-16 top-1/2 -translate-y-1/2 px-4 py-2 bg-black text-white border-2 border-black rounded-xl shadow-[2px_2px_0_0_rgba(0,0,0,1)] font-bold text-base whitespace-nowrap z-50">
+                {action.label}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      {/* Main FAB */}
+      <button
+        className={`w-14 h-14 flex items-center justify-center rounded-full bg-[#f7fd57] border-4 border-black text-3xl text-black font-extrabold shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:bg-black hover:text-white transition-all duration-200`}
+        aria-label="Open actions"
+      >
+        <span>+</span>
+      </button>
+    </div>
+  );
+}
+
 function CharacterCard({ name, color, image }) {
   return (
     <div className={`flex flex-col border-4 border-black rounded-2xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-white min-w-0 transition hover:shadow-[8px_8px_0_0_rgba(0,0,0,0.8)] hover:brightness-95`}>  
@@ -402,56 +460,71 @@ function EventCard({ event }) {
 }
 
 export default function App() {
+  const [modal, setModal] = useState(null); // 'login' | 'signup' | null
+
   return (
-    <div className="min-h-screen w-full bg-[#f9f9f6] flex flex-col">
-      {/* Header */}
-      <header className="w-full border-b-2 border-black bg-white flex items-center justify-between px-8 py-4">
-        <div className="text-2xl font-black tracking-tight text-black">Skew</div>
-        <nav className="flex gap-8 ml-8">
-          {navLinks.map((link) => (
-            <a key={link} href="#" className="text-lg font-bold text-black hover:underline underline-offset-4">{link}</a>
-          ))}
-        </nav>
-        <div className="flex gap-3 ml-auto">
-          <button className="px-5 py-1.5 rounded-lg border-2 border-black font-bold text-black bg-white hover:bg-black hover:text-white transition">Login</button>
-          <button className="px-5 py-1.5 rounded-lg border-2 border-black font-bold text-white bg-black hover:bg-[#f7fd57] hover:text-black transition">Sign Up</button>
-        </div>
-      </header>
-      {/* Hero Section */}
-      <section className="w-full bg-[#f7fd57] border-b-2 border-black flex flex-col items-center py-12 px-4">
-        <h1 className="text-4xl md:text-5xl font-black text-black text-center mb-8 leading-tight">
-          Find your perfect Skew<br />to deploy and dominate
-        </h1>
-        <div className="flex flex-col items-center w-full max-w-2xl">
-          <div className="flex w-full">
-            <div className="flex items-center bg-white border-2 border-black rounded-l-lg px-4 py-2 w-full">
-              <svg className="w-6 h-6 text-black mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
-              <input type="text" placeholder="Search by name or use filters" className="flex-1 bg-transparent outline-none text-lg font-semibold text-black placeholder-black/50" />
-            </div>
-            <button className="bg-white border-y-2 border-r-2 border-black rounded-r-lg px-4 flex items-center hover:bg-black hover:text-white transition">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M8 12h8M12 8v8" /></svg>
-            </button>
-            <button className="ml-4 px-6 py-2 rounded-lg border-2 border-black bg-[#e0e0e0] font-bold text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-black hover:text-white transition">Find Skews</button>
+    <BrowserRouter>
+      <div className="min-h-screen w-full bg-[#f9f9f6] flex flex-col">
+        {/* Header */}
+        <header className="w-full border-b-2 border-black bg-white flex items-center justify-between px-8 py-4">
+          <div className="text-2xl font-black tracking-tight text-black">Skew</div>
+          <nav className="flex gap-8 ml-8">
+            {navLinks.map((link) => (
+              <a key={link} href="#" className="text-lg font-bold text-black hover:underline underline-offset-4">{link}</a>
+            ))}
+          </nav>
+          <div className="flex gap-3 ml-auto">
+            <button onClick={() => setModal('login')} className="px-5 py-1.5 rounded-lg border-2 border-black font-bold text-black bg-white hover:bg-black hover:text-white transition">Login</button>
+            <button onClick={() => setModal('signup')} className="px-5 py-1.5 rounded-lg border-2 border-black font-bold text-white bg-black hover:bg-[#f7fd57] hover:text-black transition">Sign Up</button>
           </div>
-          <div className="flex gap-2 mt-4 w-full flex-wrap items-center">
-            <span className="text-black/60 font-semibold mr-2">Trending:</span>
-            {trendingTags.map((tag) => (
-              <span key={tag} className="px-3 py-1 rounded-full border-2 border-black bg-white text-black font-bold text-sm shadow-[1px_1px_0_0_rgba(0,0,0,1)] mr-1 mb-1">{tag}</span>
+        </header>
+        {/* Modal Overlay */}
+        {modal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+            <div className="absolute inset-0" onClick={() => setModal(null)} />
+            <div className="relative z-10">
+              <button onClick={() => setModal(null)} className="absolute -top-6 -right-6 bg-black text-white border-2 border-black rounded-full w-10 h-10 flex items-center justify-center text-2xl font-extrabold shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-red-500 transition">✕</button>
+              {modal === 'login' ? <Login /> : <SignUp />}
+            </div>
+          </div>
+        )}
+        {/* Hero Section */}
+        <section className="w-full bg-[#f7fd57] border-b-2 border-black flex flex-col items-center py-12 px-4">
+          <h1 className="text-4xl md:text-5xl font-black text-black text-center mb-8 leading-tight">
+            Find your perfect Skew<br />to deploy and dominate
+          </h1>
+          <div className="flex flex-col items-center w-full max-w-2xl">
+            <div className="flex w-full">
+              <div className="flex items-center bg-white border-2 border-black rounded-l-lg px-4 py-2 w-full">
+                <svg className="w-6 h-6 text-black mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
+                <input type="text" placeholder="Search by name or use filters" className="flex-1 bg-transparent outline-none text-lg font-semibold text-black placeholder-black/50" />
+              </div>
+              <button className="bg-white border-y-2 border-r-2 border-black rounded-r-lg px-4 flex items-center hover:bg-black hover:text-white transition">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M8 12h8M12 8v8" /></svg>
+              </button>
+              <button className="ml-4 px-6 py-2 rounded-lg border-2 border-black bg-[#e0e0e0] font-bold text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-black hover:text-white transition">Find Skews</button>
+            </div>
+            <div className="flex gap-2 mt-4 w-full flex-wrap items-center">
+              <span className="text-black/60 font-semibold mr-2">Trending:</span>
+              {trendingTags.map((tag) => (
+                <span key={tag} className="px-3 py-1 rounded-full border-2 border-black bg-white text-black font-bold text-sm shadow-[1px_1px_0_0_rgba(0,0,0,1)] mr-1 mb-1">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </section>
+        {/* Card Grid Section */}
+        <main className="w-full max-w-7xl mx-auto px-4 py-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl md:text-3xl font-black text-black">New Skew Drops</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {characterCards.map((card, i) => (
+              <CharacterCard key={i} {...card} />
             ))}
           </div>
-        </div>
-      </section>
-      {/* Card Grid Section */}
-      <main className="w-full max-w-7xl mx-auto px-4 py-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl md:text-3xl font-black text-black">New Skew Drops</h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {characterCards.map((card, i) => (
-            <CharacterCard key={i} {...card} />
-          ))}
-        </div>
-      </main>
-    </div>
+        </main>
+        <FabMenu />
+      </div>
+    </BrowserRouter>
   );
 }
