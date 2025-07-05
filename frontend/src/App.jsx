@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Login from "./Login";
 import SignUp from "./SignUp";
+import Profile from "./Profile";
+import Bank from "./Bank";
 import ProfileCircle from "./assets/profile-circle.svg";
+import Cube from "./assets/cube.svg";
 import hotboy from './assets/hotboy.png';
 import fish from './assets/fish.png';
 import lemon from './assets/lemon.png';
-import fearedone from './assets/fearedOne.png';
+import fearedOne from './assets/fearedOne.png';
 import Chloe from './assets/Chloe.png';
 import Emilie from './assets/Emilie.png';
 import Kayla from './assets/Kayla.png';
@@ -293,33 +296,33 @@ const icons = {
   ),
 };
 
-const navLinks = ["About", "Docs", "API", "Blog"];
-const trendingTags = ["fox", "brute", "mech", "🐸"];
+const navLinks = ["Explore", "Create", "Marketplace", "About"];
+const trendingTags = ["🔥 Hot", "⚡ New", "💎 Rare", "🎯 Popular", "🌟 Featured"];
 
 const characterCards = [
   {
     name: "Hotboy",
-    color: "bg-pink-200",
+    color: "bg-red-100",
     image: hotboy,
   },
   {
     name: "Fish",
-    color: "bg-yellow-200",
+    color: "bg-blue-100",
     image: fish,
   },
   {
     name: "Lemon",
-    color: "bg-blue-200",
+    color: "bg-yellow-100",
     image: lemon,
   },
   {
     name: "Feared One",
-    color: "bg-purple-200",
-    image: fearedone,
+    color: "bg-purple-100",
+    image: fearedOne,
   },
   {
     name: "Chloe",
-    color: "bg-green-200",
+    color: "bg-pink-100",
     image: Chloe,
   },
   {
@@ -366,15 +369,9 @@ function FabMenu() {
   const [open, setOpen] = React.useState(false);
   const [hovered, setHovered] = React.useState(null);
   const actions = [
-    { icon: "➕", label: "Generate" },
-    { icon: (
-        <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-          <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-          <line x1="8" y1="21" x2="16" y2="21" />
-          <line x1="12" y1="17" x2="12" y2="21" />
-        </svg>
-      ), label: "Bank" },
-    { icon: <img src={ProfileCircle} alt="Profile" className="w-7 h-7 group-hover:invert group-hover:brightness-0" />, label: "Profile" },
+    { icon: "➕", label: "Generate", action: () => console.log("Generate clicked") },
+    { icon: <img src={Cube} alt="Bank" className="w-7 h-7 group-hover:invert group-hover:brightness-0" />, label: "Bank", action: () => window.location.href = "/bank" },
+    { icon: <img src={ProfileCircle} alt="Profile" className="w-7 h-7 group-hover:invert group-hover:brightness-0" />, label: "Profile", action: () => window.location.href = "/profile" },
   ];
   return (
     <div
@@ -392,6 +389,7 @@ function FabMenu() {
               style={{ transitionDelay: `${i * 60}ms` }}
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
+              onClick={action.action}
             >
               <span>{action.icon}</span>
             </button>
@@ -417,9 +415,9 @@ function FabMenu() {
 
 function CharacterCard({ name, color, image }) {
   return (
-    <div className={`flex flex-col border-4 border-black rounded-2xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-white min-w-0 transition hover:shadow-[8px_8px_0_0_rgba(0,0,0,0.8)] hover:brightness-95`}>  
+    <div className={`flex flex-col border-4 border-black rounded-2xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-white min-w-0 transition hover:shadow-[8px_8px_0_0_rgba(0,0,0,0.8)] hover:brightness-95 overflow-hidden`}>  
       {/* Image box */}
-      <div className={`w-full aspect-square ${color} flex items-center justify-center border-b-4 border-black rounded-t-xl overflow-hidden`}>
+      <div className={`w-full aspect-square ${color} flex items-center justify-center border-b-4 border-black overflow-hidden`}>
         {image ? (
           <img src={image} alt={name} className="object-cover w-full h-full" />
         ) : (
@@ -488,42 +486,50 @@ export default function App() {
             </div>
           </div>
         )}
-        {/* Hero Section */}
-        <section className="w-full bg-[#f7fd57] border-b-2 border-black flex flex-col items-center py-12 px-4">
-          <h1 className="text-4xl md:text-5xl font-black text-black text-center mb-8 leading-tight">
-            Find your perfect Skew<br />to deploy and dominate
-          </h1>
-          <div className="flex flex-col items-center w-full max-w-2xl">
-            <div className="flex w-full">
-              <div className="flex items-center bg-white border-2 border-black rounded-l-lg px-4 py-2 w-full">
-                <svg className="w-6 h-6 text-black mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
-                <input type="text" placeholder="Search by name or use filters" className="flex-1 bg-transparent outline-none text-lg font-semibold text-black placeholder-black/50" />
-              </div>
-              <button className="bg-white border-y-2 border-r-2 border-black rounded-r-lg px-4 flex items-center hover:bg-black hover:text-white transition">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M8 12h8M12 8v8" /></svg>
-              </button>
-              <button className="ml-4 px-6 py-2 rounded-lg border-2 border-black bg-[#e0e0e0] font-bold text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-black hover:text-white transition">Find Skews</button>
-            </div>
-            <div className="flex gap-2 mt-4 w-full flex-wrap items-center">
-              <span className="text-black/60 font-semibold mr-2">Trending:</span>
-              {trendingTags.map((tag) => (
-                <span key={tag} className="px-3 py-1 rounded-full border-2 border-black bg-white text-black font-bold text-sm shadow-[1px_1px_0_0_rgba(0,0,0,1)] mr-1 mb-1">{tag}</span>
-              ))}
-            </div>
-          </div>
-        </section>
-        {/* Card Grid Section */}
-        <main className="w-full max-w-7xl mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl md:text-3xl font-black text-black">New Skew Drops</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {characterCards.map((card, i) => (
-              <CharacterCard key={i} {...card} />
-            ))}
-          </div>
-        </main>
-        <FabMenu />
+        <Routes>
+          <Route path="/" element={
+            <>
+              {/* Hero Section */}
+              <section className="w-full bg-[#f7fd57] border-b-2 border-black flex flex-col items-center py-12 px-4">
+                <h1 className="text-4xl md:text-5xl font-black text-black text-center mb-8 leading-tight">
+                  Find your perfect Skew<br />to deploy and dominate
+                </h1>
+                <div className="flex flex-col items-center w-full max-w-2xl">
+                  <div className="flex w-full">
+                    <div className="flex items-center bg-white border-2 border-black rounded-l-lg px-4 py-2 w-full">
+                      <svg className="w-6 h-6 text-black mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
+                      <input type="text" placeholder="Search by name or use filters" className="flex-1 bg-transparent outline-none text-lg font-semibold text-black placeholder-black/50" />
+                    </div>
+                    <button className="bg-white border-y-2 border-r-2 border-black rounded-r-lg px-4 flex items-center hover:bg-black hover:text-white transition">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M8 12h8M12 8v8" /></svg>
+                    </button>
+                    <button className="ml-4 px-6 py-2 rounded-lg border-2 border-black bg-[#e0e0e0] font-bold text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-black hover:text-white transition">Find Skews</button>
+                  </div>
+                  <div className="flex gap-2 mt-4 w-full flex-wrap items-center">
+                    <span className="text-black/60 font-semibold mr-2">Trending:</span>
+                    {trendingTags.map((tag) => (
+                      <span key={tag} className="px-3 py-1 rounded-full border-2 border-black bg-white text-black font-bold text-sm shadow-[1px_1px_0_0_rgba(0,0,0,1)] mr-1 mb-1">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </section>
+              {/* Card Grid Section */}
+              <main className="w-full max-w-7xl mx-auto px-4 py-12">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl md:text-3xl font-black text-black">New Skew Drops</h2>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                  {characterCards.map((card, i) => (
+                    <CharacterCard key={i} {...card} />
+                  ))}
+                </div>
+              </main>
+              <FabMenu />
+            </>
+          } />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/bank" element={<Bank />} />
+        </Routes>
       </div>
     </BrowserRouter>
   );
