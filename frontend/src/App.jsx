@@ -15,6 +15,8 @@ import Chloe from './assets/Chloe.png';
 import Emilie from './assets/Emilie.png';
 import Kayla from './assets/Kayla.png';
 import Tang from './assets/Tang.png';
+import Miso from './assets/Miso.png';
+import Kat from './assets/Kat.png';
 
 const avatar1 = "https://randomuser.me/api/portraits/women/44.jpg";
 const avatar2 = "https://randomuser.me/api/portraits/men/32.jpg";
@@ -341,6 +343,16 @@ const characterCards = [
     color: "bg-indigo-100",
     image: Tang,
   },
+  {
+    name: "Miso",
+    color: "bg-green-100",
+    image: Miso,
+  },
+  {
+    name: "Kat",
+    color: "bg-orange-100",
+    image: Kat,
+  },
 ];
 
 const statIcons = [
@@ -655,6 +667,50 @@ function CharacterDetailModal({ character, onClose }) {
         tags: ["🍊 Citrus", "🌪️ Zesty", "💨 Fresh", "🍊 Tangy"],
         createdAt: "2023-12-25",
         likes: 567
+      },
+      "Miso": {
+        description: "A mysterious and wise character with ancient knowledge and powerful magic abilities.",
+        stats: { power: 85, speed: 75, intelligence: 95, charisma: 88 },
+        abilities: ["🔮 Mystic Vision", "✨ Energy Manipulation", "🌟 Star Power"],
+        backstory: "Born from the cosmic energies of the universe, Miso carries the wisdom of countless generations.",
+        personality: "Wise, mysterious, powerful",
+        weaknesses: "Physical attacks, close combat",
+        allies: ["Emilie", "Fish"],
+        enemies: ["Hotboy", "Feared One"],
+        catchphrases: ["The stars guide my path", "Wisdom flows through me"],
+        favoriteFood: "Stellar energy crystals",
+        hobbies: "Stargazing, meditation, collecting ancient artifacts",
+        origin: "Born from cosmic energy",
+        age: "2,847 years",
+        height: "5'9\"",
+        weight: "145 lbs",
+        element: "Cosmic",
+        rarity: "Mythical",
+        tags: ["🔮 Mystic", "✨ Cosmic", "🌟 Star", "🔮 Wise"],
+        createdAt: "2023-12-20",
+        likes: 423
+      },
+      "Kat": {
+        description: "A fierce and agile warrior with lightning-fast reflexes and deadly precision.",
+        stats: { power: 90, speed: 95, intelligence: 80, charisma: 85 },
+        abilities: ["⚡ Lightning Strike", "🐱 Stealth Mode", "⚔️ Precision Blade"],
+        backstory: "Trained in the ancient arts of the shadow warriors, Kat moves like the wind and strikes like lightning.",
+        personality: "Fierce, agile, determined",
+        weaknesses: "Heavy armor, slow movement",
+        allies: ["Kayla", "Hotboy"],
+        enemies: ["Fish", "Chloe"],
+        catchphrases: ["Speed is my weapon", "Strike fast, strike true"],
+        favoriteFood: "Fresh fish and rice",
+        hobbies: "Training, weapon maintenance, meditation",
+        origin: "Shadow Warrior Clan",
+        age: "347 years",
+        height: "5'5\"",
+        weight: "125 lbs",
+        element: "Lightning",
+        rarity: "Legendary",
+        tags: ["⚡ Fast", "🐱 Agile", "⚔️ Warrior", "⚡ Lightning"],
+        createdAt: "2023-12-18",
+        likes: 678
       }
   };
 
@@ -682,10 +738,10 @@ function CharacterDetailModal({ character, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0_0_rgba(0,0,0,1)] max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0_0_rgba(0,0,0,1)] max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b-4 border-black">
+        <div className="flex items-center justify-between p-6 border-b-4 border-black bg-[#f7fd57]">
           <div>
             <h2 className="text-3xl font-black text-black mb-2">{character.name}</h2>
             <div className="flex items-center gap-4 text-sm text-black">
@@ -723,7 +779,7 @@ function CharacterDetailModal({ character, onClose }) {
 
             {/* Stats */}
             <div className="space-y-6">
-              <div>
+              <div className="bg-orange-100 border-4 border-black rounded-2xl p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
                 <h3 className="text-xl font-black text-black mb-4">Stats</h3>
                 <div className="space-y-3">
                   {Object.entries(content.stats).map(([stat, value]) => (
@@ -742,7 +798,7 @@ function CharacterDetailModal({ character, onClose }) {
               </div>
 
               {/* Abilities */}
-              <div>
+              <div className="bg-purple-100 border-4 border-black rounded-2xl p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
                 <h3 className="text-xl font-black text-black mb-4">Abilities</h3>
                 <div className="flex flex-wrap gap-2">
                   {content.abilities.map((ability, index) => (
@@ -754,7 +810,7 @@ function CharacterDetailModal({ character, onClose }) {
               </div>
 
               {/* Tags */}
-              <div>
+              <div className="bg-green-100 border-4 border-black rounded-2xl p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
                 <h3 className="text-xl font-black text-black mb-4">Tags</h3>
                 <div className="flex flex-wrap gap-2">
                   {content.tags.map((tag, index) => (
@@ -768,15 +824,29 @@ function CharacterDetailModal({ character, onClose }) {
           </div>
 
           {/* Description */}
-          <div>
-            <h3 className="text-xl font-black text-black mb-4">Description</h3>
-            <p className="text-lg text-black leading-relaxed">{content.description}</p>
+          <div className="bg-blue-100 border-4 border-black rounded-2xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-blue-500 border-2 border-black rounded-full flex items-center justify-center">
+                <span className="text-white font-black text-sm">📝</span>
+              </div>
+              <h3 className="text-xl font-black text-black">Description</h3>
+            </div>
+            <div className="bg-white border-2 border-black rounded-xl p-4 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+              <p className="text-lg text-black leading-relaxed font-medium">{content.description}</p>
+            </div>
           </div>
 
           {/* Backstory */}
-          <div>
-            <h3 className="text-xl font-black text-black mb-4">Backstory</h3>
-            <p className="text-lg text-black leading-relaxed">{content.backstory}</p>
+          <div className="bg-pink-100 border-4 border-black rounded-2xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-8 h-8 bg-pink-500 border-2 border-black rounded-full flex items-center justify-center">
+                <span className="text-white font-black text-sm">📖</span>
+              </div>
+              <h3 className="text-xl font-black text-black">Backstory</h3>
+            </div>
+            <div className="bg-white border-2 border-black rounded-xl p-4 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+              <p className="text-lg text-black leading-relaxed font-medium">{content.backstory}</p>
+            </div>
           </div>
 
           {/* Character Details Grid */}
@@ -784,19 +854,33 @@ function CharacterDetailModal({ character, onClose }) {
             {/* Left Column */}
             <div className="space-y-6">
               {/* Personality */}
-              <div>
-                <h3 className="text-xl font-black text-black mb-4">Personality</h3>
-                <p className="text-lg text-black leading-relaxed">{content.personality}</p>
+              <div className="bg-yellow-100 border-4 border-black rounded-2xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-yellow-500 border-2 border-black rounded-full flex items-center justify-center">
+                    <span className="text-white font-black text-sm">😊</span>
+                  </div>
+                  <h3 className="text-xl font-black text-black">Personality</h3>
+                </div>
+                <div className="bg-white border-2 border-black rounded-xl p-4 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                  <p className="text-lg text-black leading-relaxed font-medium">{content.personality}</p>
+                </div>
               </div>
 
               {/* Weaknesses */}
-              <div>
-                <h3 className="text-xl font-black text-black mb-4">Weaknesses</h3>
-                <p className="text-lg text-black leading-relaxed">{content.weaknesses}</p>
+              <div className="bg-red-100 border-4 border-black rounded-2xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-red-500 border-2 border-black rounded-full flex items-center justify-center">
+                    <span className="text-white font-black text-sm">⚠️</span>
+                  </div>
+                  <h3 className="text-xl font-black text-black">Weaknesses</h3>
+                </div>
+                <div className="bg-white border-2 border-black rounded-xl p-4 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                  <p className="text-lg text-black leading-relaxed font-medium">{content.weaknesses}</p>
+                </div>
               </div>
 
               {/* Allies */}
-              <div>
+              <div className="bg-emerald-100 border-4 border-black rounded-2xl p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
                 <h3 className="text-xl font-black text-black mb-4">Allies</h3>
                 <div className="flex flex-wrap gap-2">
                   {content.allies.map((ally, index) => (
@@ -808,7 +892,7 @@ function CharacterDetailModal({ character, onClose }) {
               </div>
 
               {/* Enemies */}
-              <div>
+              <div className="bg-rose-100 border-4 border-black rounded-2xl p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
                 <h3 className="text-xl font-black text-black mb-4">Enemies</h3>
                 <div className="flex flex-wrap gap-2">
                   {content.enemies.map((enemy, index) => (
@@ -823,28 +907,72 @@ function CharacterDetailModal({ character, onClose }) {
             {/* Right Column */}
             <div className="space-y-6">
               {/* Catchphrases */}
-              <div>
-                <h3 className="text-xl font-black text-black mb-4">Catchphrases</h3>
-                <div className="space-y-2">
-                  {content.catchphrases.map((phrase, index) => (
-                    <p key={index} className="text-lg text-black font-bold italic">"{phrase}"</p>
-                  ))}
+              <div className="bg-indigo-100 border-4 border-black rounded-2xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-indigo-500 border-2 border-black rounded-full flex items-center justify-center">
+                    <span className="text-white font-black text-sm">💬</span>
+                  </div>
+                  <h3 className="text-xl font-black text-black">Catchphrases</h3>
+                </div>
+                <div className="bg-white border-2 border-black rounded-xl p-4 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                  <div className="space-y-3">
+                    {content.catchphrases.map((phrase, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <span className="text-2xl">💭</span>
+                        <p className="text-lg text-black font-bold italic leading-relaxed">"{phrase}"</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               {/* Personal Info */}
-              <div>
-                <h3 className="text-xl font-black text-black mb-4">Personal Info</h3>
-                <div className="space-y-2 text-lg text-black">
-                  <p><span className="font-bold">Favorite Food:</span> {content.favoriteFood}</p>
-                  <p><span className="font-bold">Hobbies:</span> {content.hobbies}</p>
-                  <p><span className="font-bold">Origin:</span> {content.origin}</p>
-                  <p><span className="font-bold">Age:</span> {content.age}</p>
-                  <p><span className="font-bold">Height:</span> {content.height}</p>
-                  <p><span className="font-bold">Weight:</span> {content.weight}</p>
-                  <p><span className="font-bold">Element:</span> {content.element}</p>
-                  <p><span className="font-bold">Rarity:</span> {content.rarity}</p>
-                  <p><span className="font-bold">Evolution:</span> {content.evolution}</p>
+              <div className="bg-cyan-100 border-4 border-black rounded-2xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-cyan-500 border-2 border-black rounded-full flex items-center justify-center">
+                    <span className="text-white font-black text-sm">📋</span>
+                  </div>
+                  <h3 className="text-xl font-black text-black">Personal Info</h3>
+                </div>
+                <div className="bg-white border-2 border-black rounded-xl p-4 shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-lg text-black">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">🍽️</span>
+                      <span><span className="font-bold">Favorite Food:</span> {content.favoriteFood}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">🎨</span>
+                      <span><span className="font-bold">Hobbies:</span> {content.hobbies}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">🌍</span>
+                      <span><span className="font-bold">Origin:</span> {content.origin}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">🎂</span>
+                      <span><span className="font-bold">Age:</span> {content.age}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">📏</span>
+                      <span><span className="font-bold">Height:</span> {content.height}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">⚖️</span>
+                      <span><span className="font-bold">Weight:</span> {content.weight}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">⚡</span>
+                      <span><span className="font-bold">Element:</span> {content.element}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">💎</span>
+                      <span><span className="font-bold">Rarity:</span> {content.rarity}</span>
+                    </div>
+                    <div className="flex items-center gap-2 col-span-full">
+                      <span className="text-xl">🔄</span>
+                      <span><span className="font-bold">Evolution:</span> {content.evolution}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

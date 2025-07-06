@@ -72,26 +72,7 @@ export default function Profile() {
           </button>
         </div>
 
-        {/* Collection Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {/* Sample Collection Items */}
-          {Array.from({ length: 8 }, (_, i) => (
-            <div key={i} className="bg-white border-4 border-black rounded-2xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] overflow-hidden">
-              <div className="w-full aspect-square bg-gradient-to-br from-pink-100 to-purple-100 border-b-4 border-black flex items-center justify-center">
-                <span className="text-4xl">🎭</span>
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg font-black text-black mb-2">Skew #{i + 1}</h3>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-bold text-black/70">Rare</span>
-                  <button className="px-3 py-1 rounded-full border-2 border-black font-bold text-black bg-white shadow-[1px_1px_0_0_rgba(0,0,0,1)] hover:bg-black hover:text-white transition text-sm">
-                    Deploy
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+
       </div>
     </div>
   );
