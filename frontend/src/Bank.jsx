@@ -31,7 +31,7 @@ export default function Bank() {
       name: "Fish",
       image: fish,
       color: "bg-blue-100",
-      status: "Active",
+      status: "Liked",
       rarity: "Rare",
       createdAt: "2024-01-10",
       likes: 156,
@@ -64,7 +64,7 @@ export default function Bank() {
       name: "Chloe",
       image: Chloe,
       color: "bg-pink-100",
-      status: "Active",
+      status: "Liked",
       rarity: "Rare",
       createdAt: "2024-01-03",
       likes: 178,
@@ -97,7 +97,7 @@ export default function Bank() {
       name: "Tang",
       image: Tang,
       color: "bg-indigo-100",
-      status: "Active",
+      status: "Liked",
       rarity: "Legendary",
       createdAt: "2023-12-25",
       likes: 567,
@@ -112,7 +112,7 @@ export default function Bank() {
   const getStatusColor = (status) => {
     switch(status.toLowerCase()) {
       case 'deployed': return 'bg-green-100 text-green-800';
-      case 'active': return 'bg-blue-100 text-blue-800';
+      case 'liked': return 'bg-blue-100 text-blue-800';
       case 'draft': return 'bg-gray-100 text-gray-800';
       default: return 'bg-gray-100 text-gray-800';
     }
@@ -126,6 +126,14 @@ export default function Bank() {
       case 'common': return 'bg-gray-100 text-gray-800';
       default: return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleDateString('en-US', { month: 'short' });
+    const year = date.getFullYear().toString().slice(-2);
+    return `${day} ${month}, ${year}`;
   };
 
   return (
@@ -157,8 +165,8 @@ export default function Bank() {
             <div className="text-sm font-bold text-black/70">Deployed</div>
           </div>
           <div className="bg-white border-4 border-black rounded-2xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
-            <div className="text-3xl font-black text-black mb-2">{userSkews.filter(s => s.status === 'Active').length}</div>
-            <div className="text-sm font-bold text-black/70">Active</div>
+            <div className="text-3xl font-black text-black mb-2">{userSkews.filter(s => s.status === 'Liked').length}</div>
+            <div className="text-sm font-bold text-black/70">Liked</div>
           </div>
           <div className="bg-white border-4 border-black rounded-2xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
             <div className="text-3xl font-black text-black mb-2">{userSkews.filter(s => s.status === 'Draft').length}</div>
@@ -172,7 +180,7 @@ export default function Bank() {
 
         {/* Filters */}
         <div className="flex gap-2 mb-6">
-          {['all', 'deployed', 'active', 'draft'].map((filterOption) => (
+          {['all', 'deployed', 'liked', 'draft'].map((filterOption) => (
             <button
               key={filterOption}
               onClick={() => setFilter(filterOption)}
@@ -210,14 +218,11 @@ export default function Bank() {
                     {skew.status}
                   </span>
                   <span className="text-xs text-black/60 font-semibold">
-                    {new Date(skew.createdAt).toLocaleDateString()}
+                    {formatDate(skew.createdAt)}
                   </span>
                 </div>
                 
-                <div className="flex items-center justify-between text-xs text-black/70 mb-3">
-                  <span>❤️ {skew.likes}</span>
-                  <span>👁️ {skew.views}</span>
-                </div>
+
                 
                 <div className="flex gap-2">
                   <button className="flex-1 px-3 py-1.5 rounded-lg border-2 border-black font-bold text-black bg-white shadow-[1px_1px_0_0_rgba(0,0,0,1)] hover:bg-black hover:text-white transition text-sm">

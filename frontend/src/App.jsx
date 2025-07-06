@@ -6,6 +6,7 @@ import Profile from "./Profile";
 import Bank from "./Bank";
 import ProfileCircle from "./assets/profile-circle.svg";
 import Cube from "./assets/cube.svg";
+import AddIcon from "./assets/add.png";
 import hotboy from './assets/hotboy.png';
 import fish from './assets/fish.png';
 import lemon from './assets/lemon.png';
@@ -369,7 +370,7 @@ function FabMenu() {
   const [open, setOpen] = React.useState(false);
   const [hovered, setHovered] = React.useState(null);
   const actions = [
-    { icon: "➕", label: "Generate", action: () => console.log("Generate clicked") },
+    { icon: <img src={AddIcon} alt="Generate" className="w-7 h-7 group-hover:invert group-hover:brightness-0" />, label: "Generate", action: () => console.log("Generate clicked") },
     { icon: <img src={Cube} alt="Bank" className="w-7 h-7 group-hover:invert group-hover:brightness-0" />, label: "Bank", action: () => window.location.href = "/bank" },
     { icon: <img src={ProfileCircle} alt="Profile" className="w-7 h-7 group-hover:invert group-hover:brightness-0" />, label: "Profile", action: () => window.location.href = "/profile" },
   ];
@@ -413,9 +414,40 @@ function FabMenu() {
   );
 }
 
-function CharacterCard({ name, color, image }) {
+function CharacterCard({ name, color, image, onCardClick }) {
+  const [isLiked, setIsLiked] = React.useState(false);
+  const [showLikeButton, setShowLikeButton] = React.useState(false);
+
+  const handleLikeClick = (e) => {
+    e.stopPropagation();
+    setIsLiked(!isLiked);
+  };
+
   return (
-    <div className={`flex flex-col border-4 border-black rounded-2xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-white min-w-0 transition hover:shadow-[8px_8px_0_0_rgba(0,0,0,0.8)] hover:brightness-95 overflow-hidden`}>  
+    <div 
+      className={`flex flex-col border-4 border-black rounded-2xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-white min-w-0 transition hover:shadow-[8px_8px_0_0_rgba(0,0,0,0.8)] hover:brightness-95 overflow-hidden relative cursor-pointer`}
+      onMouseEnter={() => setShowLikeButton(true)}
+      onMouseLeave={() => setShowLikeButton(false)}
+      onClick={onCardClick}
+    >  
+      {/* Like Button - Hidden by default, appears on hover */}
+      <button
+        onClick={handleLikeClick}
+        className={`absolute top-3 right-3 w-12 h-12 rounded-full border-2 border-black font-bold shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-all duration-200 z-10 flex items-center justify-center ${
+          showLikeButton 
+            ? 'opacity-100 scale-100' 
+            : 'opacity-0 scale-75 pointer-events-none'
+        } ${
+          isLiked 
+            ? 'bg-red-100 text-red-800' 
+            : 'bg-white text-black hover:bg-black hover:text-white'
+        }`}
+      >
+        <svg width="20" height="20" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+          <path d="M12 21C12 21 4 13.5 4 8.5C4 5.5 6.5 3 9.5 3C11.04 3 12.5 3.81 13.28 5.09C14.06 3.81 15.52 3 17.06 3C20.06 3 22.5 5.5 22.5 8.5C22.5 13.5 12 21 12 21Z" />
+        </svg>
+      </button>
+
       {/* Image box */}
       <div className={`w-full aspect-square ${color} flex items-center justify-center border-b-4 border-black overflow-hidden`}>
         {image ? (
@@ -432,6 +464,394 @@ function CharacterCard({ name, color, image }) {
         >
           View
         </button>
+      </div>
+    </div>
+  );
+}
+
+function CharacterDetailModal({ character, onClose }) {
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleDateString('en-US', { month: 'short' });
+    const year = date.getFullYear().toString().slice(-2);
+    return `${day} ${month}, ${year}`;
+  };
+  
+  // Simple character content for tutorial purposes
+  const characterContent = {
+          "Hotboy": {
+        description: "A fiery character with explosive personality and unstoppable energy.",
+        stats: { power: 95, speed: 88, intelligence: 72, charisma: 90 },
+        abilities: ["🔥 Fire Blast", "💨 Speed Burst", "😤 Intimidation"],
+        backstory: "Born from the flames of chaos, Hotboy emerged as a force of nature.",
+        personality: "Hot-headed, passionate, protective",
+        weaknesses: "Water attacks, cold environments",
+        allies: ["Lemon", "Kayla"],
+        enemies: ["Fish", "Feared One"],
+        catchphrases: ["Feel the Burn!", "Hot enough for ya?"],
+        favoriteFood: "Spicy chili peppers",
+        hobbies: "Training, collecting fire gems",
+        origin: "Born from a dying star",
+        age: "25",
+        height: "6'2\"",
+        weight: "185 lbs",
+        element: "Fire",
+        rarity: "Legendary",
+        tags: ["🔥 Hot", "⚡ Fast", "😤 Intimidating", "🔥 Fire Element"],
+        createdAt: "2024-01-15",
+        likes: 234
+      },
+          "Fish": {
+        description: "A mysterious aquatic being with deep wisdom and fluid movements.",
+        stats: { power: 75, speed: 85, intelligence: 95, charisma: 80 },
+        abilities: ["🌊 Water Control", "🧠 Mind Reading", "🐟 Shape Shift"],
+        backstory: "From the depths of the ancient ocean, Fish carries the knowledge of millennia.",
+        personality: "Wise, mysterious, peaceful",
+        weaknesses: "Electric attacks, dehydration",
+        allies: ["Emilie", "Chloe"],
+        enemies: ["Hotboy", "Feared One"],
+        catchphrases: ["The tides of fate flow ever onward"],
+        favoriteFood: "Fresh plankton",
+        hobbies: "Meditation, collecting artifacts",
+        origin: "Born in the Mariana Trench",
+        age: "Ancient",
+        height: "5'8\"",
+        weight: "150 lbs",
+        element: "Water",
+        rarity: "Ancient",
+        tags: ["🌊 Water", "🧠 Wise", "🐟 Shape Shifter", "🌊 Ancient"],
+        createdAt: "2024-01-10",
+        likes: 156
+      },
+          "Lemon": {
+        description: "A zesty and refreshing character with a sour attitude but sweet heart.",
+        stats: { power: 70, speed: 90, intelligence: 78, charisma: 85 },
+        abilities: ["🍋 Acid Spray", "⚡ Energy Boost", "🌿 Healing Touch"],
+        backstory: "Harvested from the golden groves, Lemon embodies the perfect balance of sweet and sour.",
+        personality: "Zesty, caring, protective",
+        weaknesses: "Cold temperatures, dehydration",
+        allies: ["Chloe", "Fish"],
+        enemies: ["Feared One", "Hotboy"],
+        catchphrases: ["When life gives you lemons, make lemonade!"],
+        favoriteFood: "Fresh citrus fruits",
+        hobbies: "Gardening, making juice",
+        origin: "Created by Citrus Druids",
+        age: "847 years",
+        height: "5'6\"",
+        weight: "130 lbs",
+        element: "Nature",
+        rarity: "Rare",
+        tags: ["🍋 Citrus", "⚡ Energetic", "🌿 Healing", "🍋 Zesty"],
+        createdAt: "2024-01-08",
+        likes: 89
+      },
+      "Feared One": {
+        description: "A dark and mysterious entity that strikes fear into the hearts of enemies.",
+        stats: { power: 92, speed: 80, intelligence: 88, charisma: 75 },
+        abilities: ["👻 Shadow Walk", "😱 Fear Aura", "⚔️ Dark Blade"],
+        backstory: "Born from the nightmares of the world, the Feared One exists to bring justice through terror.",
+        personality: "Dark, mysterious, honorable",
+        weaknesses: "Light magic, positive emotions",
+        allies: ["Kayla", "Emilie"],
+        enemies: ["Chloe", "Lemon"],
+        catchphrases: ["Fear is your only companion now"],
+        favoriteFood: "Shadow essence",
+        hobbies: "Collecting dark artifacts",
+        origin: "Born from nightmares",
+        age: "Unknown",
+        height: "6'5\"",
+        weight: "Unknown",
+        element: "Darkness",
+        rarity: "Mythical",
+        tags: ["👻 Shadow", "😱 Fear", "⚔️ Dark", "👻 Mysterious"],
+        createdAt: "2024-01-05",
+        likes: 445
+      },
+      "Chloe": {
+        description: "A charming and elegant character with a gentle spirit and powerful magic.",
+        stats: { power: 82, speed: 75, intelligence: 90, charisma: 95 },
+        abilities: ["🌸 Flower Magic", "💫 Charm Spell", "🦋 Butterfly Summon"],
+        backstory: "Chloe's beauty is matched only by her kindness.",
+        personality: "Gentle, kind, graceful",
+        weaknesses: "Dark magic, negative emotions",
+        allies: ["Lemon", "Fish"],
+        enemies: ["Feared One", "Hotboy"],
+        catchphrases: ["Beauty blooms from within"],
+        favoriteFood: "Fresh fruits and honey",
+        hobbies: "Gardening, painting",
+        origin: "Born from a cherry blossom tree",
+        age: "1,247 years",
+        height: "5'4\"",
+        weight: "110 lbs",
+        element: "Nature",
+        rarity: "Legendary",
+        tags: ["🌸 Flower", "💫 Charm", "🦋 Butterfly", "🌸 Peaceful"],
+        createdAt: "2024-01-03",
+        likes: 178
+      },
+      "Emilie": {
+        description: "A mystical sorceress with ancient knowledge and powerful spells.",
+        stats: { power: 88, speed: 70, intelligence: 98, charisma: 82 },
+        abilities: ["🔮 Crystal Ball", "✨ Magic Missile", "🌟 Star Summon"],
+        backstory: "Trained in the ancient towers of magic, Emilie has dedicated her life to mastering the arcane.",
+        personality: "Wise, powerful, humble",
+        weaknesses: "Anti-magic fields, exhaustion",
+        allies: ["Fish", "Feared One"],
+        enemies: ["Hotboy", "Lemon"],
+        catchphrases: ["Magic flows through all things"],
+        favoriteFood: "Magical herbs",
+        hobbies: "Studying texts, stargazing",
+        origin: "Born in Crystal Valley",
+        age: "1,847 years",
+        height: "5'8\"",
+        weight: "140 lbs",
+        element: "Arcane",
+        rarity: "Mythical",
+        tags: ["🔮 Magic", "✨ Arcane", "🌟 Star", "🔮 Mystical"],
+        createdAt: "2024-01-01",
+        likes: 67
+      },
+      "Kayla": {
+        description: "A fierce warrior with unmatched strength and determination.",
+        stats: { power: 98, speed: 85, intelligence: 75, charisma: 80 },
+        abilities: ["💪 Super Strength", "🛡️ Shield Wall", "⚔️ Battle Cry"],
+        backstory: "Raised in the warrior clans, Kayla's strength is legendary.",
+        personality: "Brave, strong, protective",
+        weaknesses: "Magic attacks, manipulation",
+        allies: ["Hotboy", "Feared One"],
+        enemies: ["Fish", "Chloe"],
+        catchphrases: ["Strength through honor!"],
+        favoriteFood: "Protein-rich meals",
+        hobbies: "Training, weapon collecting",
+        origin: "Born during the Great War",
+        age: "547 years",
+        height: "6'0\"",
+        weight: "180 lbs",
+        element: "Physical",
+        rarity: "Legendary",
+        tags: ["💪 Strong", "🛡️ Warrior", "⚔️ Battle", "💪 Protector"],
+        createdAt: "2023-12-28",
+        likes: 312
+      },
+      "Tang": {
+        description: "A citrus-powered hero with tangy abilities and refreshing personality.",
+        stats: { power: 78, speed: 88, intelligence: 82, charisma: 85 },
+        abilities: ["🍊 Citrus Burst", "🌪️ Zest Tornado", "💨 Fresh Breeze"],
+        backstory: "Infused with the essence of the rarest citrus fruits, Tang's powers are unique.",
+        personality: "Refreshing, energetic, optimistic",
+        weaknesses: "Cold temperatures, dehydration",
+        allies: ["Lemon", "Chloe"],
+        enemies: ["Hotboy", "Feared One"],
+        catchphrases: ["Stay fresh!"],
+        favoriteFood: "All citrus fruits",
+        hobbies: "Citrus farming, juice making",
+        origin: "Created by Citrus Alchemists",
+        age: "234 years",
+        height: "5'7\"",
+        weight: "145 lbs",
+        element: "Citrus",
+        rarity: "Rare",
+        tags: ["🍊 Citrus", "🌪️ Zesty", "💨 Fresh", "🍊 Tangy"],
+        createdAt: "2023-12-25",
+        likes: 567
+      }
+  };
+
+  const content = characterContent[character.name] || {
+    description: "A mysterious character with unknown powers and abilities.",
+    stats: { power: 75, speed: 75, intelligence: 75, charisma: 75 },
+    abilities: ["❓ Unknown Ability"],
+    backstory: "Little is known about this character's origins and powers.",
+    personality: "Unknown",
+    weaknesses: "Unknown",
+    allies: ["Unknown"],
+    enemies: ["Unknown"],
+    catchphrases: ["Unknown"],
+    favoriteFood: "Unknown",
+    hobbies: "Unknown",
+    origin: "Unknown",
+    age: "Unknown",
+    height: "Unknown",
+    weight: "Unknown",
+    element: "Unknown",
+    rarity: "Unknown",
+    tags: ["❓ Unknown"],
+    createdAt: "2024-01-15",
+    likes: 0
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0_0_rgba(0,0,0,1)] max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b-4 border-black">
+          <div>
+            <h2 className="text-3xl font-black text-black mb-2">{character.name}</h2>
+            <div className="flex items-center gap-4 text-sm text-black">
+              <span className="font-bold">Created: {formatDate(content.createdAt)}</span>
+              <span className="font-bold flex items-center gap-1">
+                <svg width="16" height="16" fill="#dc2626" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                  <path d="M12 21C12 21 4 13.5 4 8.5C4 5.5 6.5 3 9.5 3C11.04 3 12.5 3.81 13.28 5.09C14.06 3.81 15.52 3 17.06 3C20.06 3 22.5 5.5 22.5 8.5C22.5 13.5 12 21 12 21Z" />
+                </svg>
+                {content.likes} likes
+              </span>
+            </div>
+          </div>
+          <button 
+            onClick={onClose}
+            className="w-12 h-12 bg-black text-white border-2 border-black rounded-full flex items-center justify-center text-2xl font-extrabold shadow-[3px_3px_0_0_rgba(0,0,0,1)] hover:bg-red-500 transition"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 space-y-8">
+          {/* Image and Stats Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Image */}
+            <div className={`aspect-square ${character.color} border-4 border-black rounded-2xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] overflow-hidden`}>
+              {character.image ? (
+                <img src={character.image} alt={character.name} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-8xl text-black/30 font-extrabold">?</span>
+                </div>
+              )}
+            </div>
+
+            {/* Stats */}
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-xl font-black text-black mb-4">Stats</h3>
+                <div className="space-y-3">
+                  {Object.entries(content.stats).map(([stat, value]) => (
+                    <div key={stat} className="flex items-center gap-3">
+                      <span className="text-sm font-bold text-black capitalize w-20">{stat}</span>
+                      <div className="flex-1 bg-gray-200 border-2 border-black rounded-full h-4">
+                        <div 
+                          className="bg-black h-full rounded-full transition-all duration-500"
+                          style={{ width: `${value}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-black text-black w-8">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Abilities */}
+              <div>
+                <h3 className="text-xl font-black text-black mb-4">Abilities</h3>
+                <div className="flex flex-wrap gap-2">
+                  {content.abilities.map((ability, index) => (
+                    <span key={index} className="px-4 py-2 bg-white border-2 border-black rounded-full text-sm font-bold text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                      {ability}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div>
+                <h3 className="text-xl font-black text-black mb-4">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {content.tags.map((tag, index) => (
+                    <span key={index} className="px-3 py-1.5 bg-[#f7fd57] border-2 border-black rounded-full text-sm font-bold text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <h3 className="text-xl font-black text-black mb-4">Description</h3>
+            <p className="text-lg text-black leading-relaxed">{content.description}</p>
+          </div>
+
+          {/* Backstory */}
+          <div>
+            <h3 className="text-xl font-black text-black mb-4">Backstory</h3>
+            <p className="text-lg text-black leading-relaxed">{content.backstory}</p>
+          </div>
+
+          {/* Character Details Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Left Column */}
+            <div className="space-y-6">
+              {/* Personality */}
+              <div>
+                <h3 className="text-xl font-black text-black mb-4">Personality</h3>
+                <p className="text-lg text-black leading-relaxed">{content.personality}</p>
+              </div>
+
+              {/* Weaknesses */}
+              <div>
+                <h3 className="text-xl font-black text-black mb-4">Weaknesses</h3>
+                <p className="text-lg text-black leading-relaxed">{content.weaknesses}</p>
+              </div>
+
+              {/* Allies */}
+              <div>
+                <h3 className="text-xl font-black text-black mb-4">Allies</h3>
+                <div className="flex flex-wrap gap-2">
+                  {content.allies.map((ally, index) => (
+                    <span key={index} className="px-3 py-1 bg-green-100 border-2 border-black rounded-full text-sm font-bold text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                      🤝 {ally}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Enemies */}
+              <div>
+                <h3 className="text-xl font-black text-black mb-4">Enemies</h3>
+                <div className="flex flex-wrap gap-2">
+                  {content.enemies.map((enemy, index) => (
+                    <span key={index} className="px-3 py-1 bg-red-100 border-2 border-black rounded-full text-sm font-bold text-black shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+                      ⚔️ {enemy}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div className="space-y-6">
+              {/* Catchphrases */}
+              <div>
+                <h3 className="text-xl font-black text-black mb-4">Catchphrases</h3>
+                <div className="space-y-2">
+                  {content.catchphrases.map((phrase, index) => (
+                    <p key={index} className="text-lg text-black font-bold italic">"{phrase}"</p>
+                  ))}
+                </div>
+              </div>
+
+              {/* Personal Info */}
+              <div>
+                <h3 className="text-xl font-black text-black mb-4">Personal Info</h3>
+                <div className="space-y-2 text-lg text-black">
+                  <p><span className="font-bold">Favorite Food:</span> {content.favoriteFood}</p>
+                  <p><span className="font-bold">Hobbies:</span> {content.hobbies}</p>
+                  <p><span className="font-bold">Origin:</span> {content.origin}</p>
+                  <p><span className="font-bold">Age:</span> {content.age}</p>
+                  <p><span className="font-bold">Height:</span> {content.height}</p>
+                  <p><span className="font-bold">Weight:</span> {content.weight}</p>
+                  <p><span className="font-bold">Element:</span> {content.element}</p>
+                  <p><span className="font-bold">Rarity:</span> {content.rarity}</p>
+                  <p><span className="font-bold">Evolution:</span> {content.evolution}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
       </div>
     </div>
   );
@@ -459,6 +879,15 @@ function EventCard({ event }) {
 
 export default function App() {
   const [modal, setModal] = useState(null); // 'login' | 'signup' | null
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
+
+  const handleCharacterClick = (character) => {
+    setSelectedCharacter(character);
+  };
+
+  const closeCharacterModal = () => {
+    setSelectedCharacter(null);
+  };
 
   return (
     <BrowserRouter>
@@ -485,6 +914,14 @@ export default function App() {
               {modal === 'login' ? <Login /> : <SignUp />}
             </div>
           </div>
+        )}
+
+        {/* Character Detail Modal */}
+        {selectedCharacter && (
+          <CharacterDetailModal 
+            character={selectedCharacter} 
+            onClose={closeCharacterModal} 
+          />
         )}
         <Routes>
           <Route path="/" element={
@@ -520,7 +957,11 @@ export default function App() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                   {characterCards.map((card, i) => (
-                    <CharacterCard key={i} {...card} />
+                    <CharacterCard 
+                      key={i} 
+                      {...card} 
+                      onCardClick={() => handleCharacterClick(card)}
+                    />
                   ))}
                 </div>
               </main>
